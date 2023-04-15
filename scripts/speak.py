@@ -62,7 +62,7 @@ def brian_speech(text):
         with mutex_lock:
             with open("speech.mp3", "wb") as f:
                 f.write(response.content)
-            playsound("speech.mp3")
+            playsound("speech.mp3", )
             os.remove("speech.mp3")
         return True
     else:
@@ -72,7 +72,31 @@ def brian_speech(text):
 
 
 def gtts_speech(text):
-    tts = gtts.gTTS(text)
+    # Convert text to speech through Google's TTS API
+    # This is the default speech engine
+    # If you don't have an API key, you can use this
+    # It's not as good as the other engines, but it's free
+    # If you want to use this, set use_brian_tts to False in config.py
+    # If you want to use Brian, set use_brian_tts to True in config.py
+    # If you want to use the elevenlabs.io API, set elevenlabs_api_key to your API key in config.py
+
+    # If you want to use a different language, change the lang parameter
+    # For a list of languages, see https://gtts.readthedocs.io/en/latest/module.html#gtts.tts.gTTS
+    # For example, to use Spanish, change lang="en" to lang="es"
+    # If you want to use a different language, you'll need to install the language pack
+    # For example, to use Spanish, run "pip install gTTS-token[es]"
+
+    # If you want to change the speed of the speech, change the slow parameter
+    # For example, to make the speech 1.5x faster, change slow=False to slow=True
+    # If you want to change the speed of the speech, you'll need to install the speed pack
+    # For example, to make the speech 1.5x faster, run "pip install gTTS-token[speed]"
+    
+    slow = cfg.slow_tts
+    if slow == True:
+        tts = gtts.gTTS(text, lang="en", slow=True)
+    else:
+        tts = gtts.gTTS(text, lang="en", slow=False)
+    
     with mutex_lock:
         tts.save("speech.mp3")
         playsound("speech.mp3", True)
